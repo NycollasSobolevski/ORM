@@ -25,19 +25,19 @@ private static ObjectRelationalMappingConfig config = null;
     public virtual string StringConnection { get; set; }
     public virtual string InitialCatalog { get; set; }
     public IQueryProvider QueryProvider { get; set; }
-    public AccessProvider AccessProvider { get; set; }
+    public IAccessProviders IAccessProviders { get; set; }
     public ObjectRelationalMappingConfig(
         DataBaseSystem dataBaseSystem,
         string stringConnection,
         string initialCatalog,
         IQueryProvider queryProvider,
-        AccessProvider accessProvider
+        IAccessProviders IAccessProviders
     ){
         this.DataBaseSystem = dataBaseSystem;
         this.StringConnection = stringConnection;
         this.InitialCatalog = initialCatalog;
         this.QueryProvider = queryProvider;
-        this.AccessProvider = accessProvider;
+        this.IAccessProviders = IAccessProviders;
     }
     public void Use()
         => config = this;

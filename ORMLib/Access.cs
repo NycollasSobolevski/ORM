@@ -9,7 +9,7 @@ public abstract class Access
         {
             if (instance is not null)
                 return instance;
-            var provider = ObjectRelationalMappingConfig.Config.AccessProvider;
+            var provider = ObjectRelationalMappingConfig.Config.IAccessProviders;
             instance = provider.Provide();
             return instance;
         }

@@ -1,5 +1,5 @@
 
-namespace ORMLib;
+namespace ORMLib.Providers;
 
 public interface IAccessProviders
 {

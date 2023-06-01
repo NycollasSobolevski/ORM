@@ -5,7 +5,7 @@ using ORMLib.DataAnnotations;
 var builder = ObjectRelationalMappingConfig.GetBuilder();
 builder
 .UseMSSqlServer()
-.SetDataSource(@"JVLPC0480\SQLEXPRESS")
+.SetDataSource(@"CT-C-0018C\SQLEXPRESS")
 .SetInitialCatalog("MyDatabaseTest")
 .SetIntegratedSecurity(true)
 .Build()

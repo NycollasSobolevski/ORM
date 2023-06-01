@@ -19,26 +19,31 @@ internal class SqlAccess : Access
     {
         if (exist)
             return;
+        
         exist = true;
+        
         var config = ObjectRelationalMappingConfig.Config;
-        var masterStrConn = config.StringConnection.Replace(
-        config.InitialCatalog,
-        "master"
-        );
+        var masterStrConn = config.StringConnection.Replace(config.InitialCatalog,"master");
         var conn = new SqlConnection(masterStrConn);
+        
         await conn.OpenAsync();
+        
         var comm = new SqlCommand();
         comm.CommandText = $"select * from sys.databases where name = '{config.InitialCatalog}'";
         comm.Connection = conn;
         comm.CommandType = CommandType.Text;
+        
         var reader = await comm.ExecuteReaderAsync();
         var dt = new DataTable();
+        
         dt.Load(reader);
+        
         if (dt.Rows.Count > 0)
         {
             await conn.CloseAsync();
             return;
         }
+        
         comm.CommandText = $"create database {config.InitialCatalog}";
         await comm.ExecuteNonQueryAsync();
         await conn.CloseAsync();
@@ -47,7 +52,9 @@ internal class SqlAccess : Access
     {
         if (loaded)
             return;
+
         await CreateDataBaseIfNotExistAsync();
+        
         var config = ObjectRelationalMappingConfig.Config;
         conn = new SqlConnection(config.StringConnection);
         await conn.OpenAsync();
@@ -59,14 +66,17 @@ internal class SqlAccess : Access
     public async Task CreateIfNotExistAsync(Type type)
     {
         await LoadAsync();
+
         if (await TestExistenceAsync(type))
             return;
+        
         comm.CommandText = $"create table {type.Name} (";
         foreach (var prop in type.GetProperties())
         {
             string column = $"{prop.Name} {ConvertToSqlType(prop.PropertyType)}";
             if (prop.Name == "ID")
                 column += " identity primary key";
+            
             var foreignKeyAtt = prop.GetCustomAttribute<ForeignKeyAttribute>();
             if (foreignKeyAtt != null)
             {
@@ -133,6 +143,7 @@ internal class SqlAccess : Access
             if (args.Length > 0)
                 type = args[0];
         }
+
         int i = 0;
         object[] data = new object[dt.Rows.Count];
         foreach (DataRow row in dt.Rows)
@@ -142,9 +153,12 @@ internal class SqlAccess : Access
                 data[i++] = row.ItemArray[0];
                 continue;
             }
+
             var obj = Activator.CreateInstance(type);
+            
             foreach (var prop in type.GetProperties())
                 prop.SetValue(obj, row[prop.Name]);
+
             data[i++] = obj;
         }
         if (isCollection)

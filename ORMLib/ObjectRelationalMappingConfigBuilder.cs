@@ -6,7 +6,7 @@ public class ObjectRelationalMappingConfigBuilder
     private DataBaseSystem dataBaseSystem;
     private SqlConnectionStringBuilder stringConnectionBuilder = new SqlConnectionStringBuilder();
     private IQueryProvider queryProvider;
-    private AccessProvider accessProvider;
+    private IAccessProviders IAccessProviders;
     public ObjectRelationalMappingConfigBuilder SetDataBaseSystem(DataBaseSystem sys)
     {
         this.dataBaseSystem = sys;
@@ -37,9 +37,9 @@ public class ObjectRelationalMappingConfigBuilder
         this.queryProvider = provider;
         return this;
     }
-    public ObjectRelationalMappingConfigBuilder SetAccessProvider(AccessProvider provider)
+    public ObjectRelationalMappingConfigBuilder SetIAccessProviders(IAccessProviders provider)
     {
-        this.accessProvider = provider;
+        this.IAccessProviders = provider;
         return this;
     }
     public ObjectRelationalMappingConfig Build()
@@ -49,7 +49,7 @@ public class ObjectRelationalMappingConfigBuilder
         this.stringConnectionBuilder.ConnectionString,
         this.stringConnectionBuilder.InitialCatalog,
         this.queryProvider,
-        this.accessProvider
+        this.IAccessProviders
         );
         return config;
     }
